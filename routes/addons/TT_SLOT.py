@@ -85,7 +85,8 @@ def slot(loc):
 
     except IndexError:
     	if cd[0] < 10 or cd[1] != 0:
-            return({'err': "BAD FILE: Please upload a proper time table image."})
+            return
+            # ({'err': "BAD FILE: Please upload a proper time table image."})
 
     ##in case of a correctly cropped image, empty rows need be added to the top
     ##of the table, before rotation

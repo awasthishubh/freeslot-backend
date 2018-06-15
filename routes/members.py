@@ -1,10 +1,7 @@
 from flask import Flask, jsonify, Response, request
-import sys
+import sys, string, random, os
 sys.path.insert(0, './routes/addons')
 from preproc_beta import preproc
-import string
-import random
-import os
 
 def routes(app):
     @app.route('/members',methods=['post'])
@@ -15,18 +12,19 @@ def routes(app):
         f.save('./tmp/'+name+'.png')
         slots=preproc('./tmp/'+name+'.png')
         os.remove('./tmp/'+name+'.png')
+        if(slots):
+            freeSlots=[]
+            for i in range(len(slots)):
+                if(not slots[i]):
+                    freeSlots.append(i)
 
-        freeSlots=[]
-        for i in range(len(slots)):
-            if(not slots[i]):
-                freeSlots.append(i)
+            details={
+                'name':data['name'],
+                'org':data['org'],
+                'email':data['email'],
+                'phno':data['phno'],
+                'slots':freeSlots
+            }
 
-        details={
-            'name':data['name'],
-            'org':data['org'],
-            'email':data['email'],
-            'phno':data['phno'],
-            'slots':freeSlots
-        }
-
-        return jsonify(details)
+            return jsonify(details)
+        return (jsonify({'err':'bad file'}),400)
