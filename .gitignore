@@ -1,6 +1,6 @@
 .DS_Store
 readme_assets
-proj/
+keys.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

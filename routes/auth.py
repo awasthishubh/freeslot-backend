@@ -22,7 +22,7 @@ def jwt_required(func):
     return jwt_func
 ################################################
 
-def routes(app):
+def routes(app,db):
     @app.route('/auth',methods=['get','post'])
     def auth():
         usid=request.form['usid']
