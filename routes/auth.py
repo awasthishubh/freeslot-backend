@@ -1,5 +1,7 @@
 from flask import jsonify, Response, request
-import jwt, functools
+import jwt, functools, sys
+sys.path.insert(0, '../config')
+import keys
 
 #########Decorator for decoding jwt#############
 def jwt_required(func):
@@ -9,10 +11,10 @@ def jwt_required(func):
             auth=(request.headers['Authorization']).split(' ')
             if(auth[0]=='Bearer'):
                 try:
-                    payload=jsonify(jwt.decode(auth[1],'ss'))
+                    payload=jsonify(jwt.decode(auth[1],keys.jwt_secret))
                     return func(payload)
                 except jwt.exceptions.DecodeError:#jwt.exceptions.DecodeError:
-                    return (jsonify({'err':'invalid JSON'}), 400)
+                    return (jsonify({'err':'invalid tokken'}), 400)
             else:
                 return (jsonify({'err':'Bearer tokken missing'}), 400)
         else:
@@ -28,10 +30,10 @@ def routes(app):
         # Authenticate user
         #
         #
-        token=jwt.encode({'usid':usid},'ss').decode("utf-8")
+        token=jwt.encode({'usid':usid},keys.jwt_secret).decode("utf-8")
         return jsonify({"access_token":token})
 
     @app.route('/auth/members',methods=['get'])
     @jwt_required
     def memauth(usid):
-        return
+        return usid

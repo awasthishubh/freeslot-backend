@@ -1,8 +1,8 @@
 import sys
 sys.path.insert(0, './routes')
+sys.path.insert(0, './config')
 from flask import Flask, jsonify, Response, request
-import members, auth
-
+import members, auth, keys
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = './tmp/'
