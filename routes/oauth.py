@@ -21,7 +21,7 @@ def routes(app,db):
         &response_type=code
         &scope=https://www.googleapis.com/auth/userinfo.email
         &client_id='''+keys.google['client_id']+'''
-        &redirect_uri=http://localhost:5000/oauth/callback'''
+        &redirect_uri='''+keys.google['callback']
         url = url.replace("\r","")
         url = url.replace("\n","")
         url = url.replace(" ","")
@@ -36,7 +36,7 @@ def routes(app,db):
                 'client_secret': keys.google['client_secret'],
                 'grant_type': 'authorization_code',
                 'code':request.args['code'],
-                'redirect_uri': 'http://localhost:5000/oauth/callback',
+                'redirect_uri': keys.google['callback'],
             }
 
         r = requests.post('https://accounts.google.com/o/oauth2/token', data = data)
