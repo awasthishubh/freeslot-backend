@@ -4,8 +4,9 @@ sys.path.insert(0, './routes')
 sys.path.insert(0, './config')
 sys.path.insert(0, './models')
 from flask import Flask, jsonify, Response, request
-import members, auth, oauth, keys, members_model
+import members, auth, oauth, members_model
 app = Flask(__name__)
+from keys import keys
 from pymongo import MongoClient
 
 app.config['UPLOAD_FOLDER'] = './tmp/'
@@ -21,10 +22,10 @@ members.routes(app,db)
 auth.routes(app,db)
 oauth.routes(app,db)
 
-# @app.errorhandler(400)
+# @app.errorhandler(404)
 # def err400(err):
 #     print(err)
-#     return (jsonify({'err': 'bad request'}), 400)
+#     return (jsonify({'err': 'Not found'}), 404)
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 from flask import jsonify, Response, request
-import jwt, functools, sys
-import keys, org_model
+import jwt, functools, sys, org_model
+from keys import keys
 
 #########Decorator for decoding jwt#############
 def jwt_required(func):

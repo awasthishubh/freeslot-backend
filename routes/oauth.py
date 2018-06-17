@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, Response, request, redirect
-import requests, keys
+import requests
+from keys import keys
 import org_model
 
 def routes(app,db):
