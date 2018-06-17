@@ -19,7 +19,7 @@ def routes(app,db):
         login_hint='''+request.args['mail_id']+'''
         &state='''+str(data)+'''
         &response_type=code
-        &scope=https://www.googleapis.com/auth/userinfo.email
+        &scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/plus.login
         &client_id='''+keys.google['client_id']+'''
         &redirect_uri='''+keys.google['callback']
         url = url.replace("\r","")

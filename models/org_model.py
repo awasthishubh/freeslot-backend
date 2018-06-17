@@ -1,13 +1,13 @@
 def create(db, org, maintainer):
-    # print(maintainer, org)
     data={
         'usid': org['usid'],
         'passwd': org['passwd'],
         'name': org['name'],
         'descr': org['descr'],
         'maintainer_name': maintainer['name'],
-        'maintainer_email': maintainer['name'],
-        'maintainer_photo': maintainer['name']
+        'maintainer_email': maintainer['email'],
+        'maintainer_photo': maintainer['picture'],
+        'maintainer_id': maintainer['id']
     }
 
     exists=db.organisations.find_one({'usid':data['usid']})
