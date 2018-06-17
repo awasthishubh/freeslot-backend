@@ -4,3 +4,4 @@ gunicorn
 numpy
 pillow
 pymongo
+requests

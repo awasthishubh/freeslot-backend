@@ -4,7 +4,7 @@ sys.path.insert(0, './routes')
 sys.path.insert(0, './config')
 sys.path.insert(0, './models')
 from flask import Flask, jsonify, Response, request
-import members, auth, keys, members_model
+import members, auth, oauth, keys, members_model
 app = Flask(__name__)
 from pymongo import MongoClient
 
@@ -19,6 +19,7 @@ def index():
 
 members.routes(app,db)
 auth.routes(app,db)
+oauth.routes(app,db)
 
 # @app.errorhandler(400)
 # def err400(err):
