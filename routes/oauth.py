@@ -1,9 +1,9 @@
 from flask import Flask, jsonify, Response, request, redirect
 import requests
 from keys import keys
-import org_model
+import model
 
-def routes(app,db):
+def routes(app):
     @app.route('/oauth/')
     def oauth():
         data={
@@ -28,7 +28,6 @@ def routes(app,db):
         return redirect(url)
 
     @app.route('/oauth/callback')
-    @app.route('/oauth/callback')
     def callback():
         # return jsonify()
         data= {
@@ -48,7 +47,7 @@ def routes(app,db):
         access_token=r.json()['access_token']
         t=requests.get('https://www.googleapis.com/oauth2/v2/userinfo', headers={'Authorization': 'Bearer '+access_token})
 
-        stat=org_model.create(db,eval(request.args['state']),t.json())
+        stat=model.Organisations.create(eval(request.args['state']),t.json())
 
         if stat[1]==409:
             return(jsonify({'status':409, 'err':'User Already Exists'}),409)

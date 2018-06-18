@@ -1,12 +1,12 @@
 from flask import Flask, jsonify, Response, request
 import sys, string, random, os
 from preproc_beta import preproc
-import members_model
+import model
 
-def routes(app,db):
+def routes(app):
     @app.route('/members',methods=['post'])
     def memindex():
-        if(members_model.exists(db,request.form['reg'],request.form['org'])):
+        if(model.Members.exists(request.form['reg'],request.form['org'])):
             return(jsonify({'status':409, 'err':'User Already registered under the organisation'}),409)
         name=''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
         data=request.form
@@ -23,7 +23,7 @@ def routes(app,db):
                 'phno':data['phno'],
                 'slots':slots
             }
-            stat=members_model.insert(db,details)
+            stat=model.Members.insert(details)
             if stat==500:
                 return(jsonify({'status':500, 'err':'Internal Server Error'}),500)
             return(jsonify({'status':200, 'data':details}),200)
