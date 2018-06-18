@@ -28,3 +28,8 @@ def routes(app):
                 return(jsonify({'status':500, 'err':'Internal Server Error'}),500)
             return(jsonify({'status':200, 'data':details}),200)
         return (jsonify({'err':'bad file'}),400)
+
+    @app.route('/organisations',methods=['get'])
+    def org():
+        orgs=model.Organisations.all()
+        return jsonify(orgs)

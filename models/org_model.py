@@ -25,7 +25,8 @@ class Organisations():
     def auth(self,data):
         user=self.db.organisations.find_one({'usid':data['usid']})
         if(user and user['passwd']==data['passwd']):
-            return (data,200)
+            user['_id']=str(user['_id'])
+            return (user,200)
         else:
             return (None,401)
 
@@ -33,3 +34,15 @@ class Organisations():
         sts=self.db.organisations.find_one({'usid':usid})
         if(sts): return 200
         else: return 404
+
+    def all(self):
+        orgsCursor=self.db.organisations.find({})
+        orgs=[]
+        for org in orgsCursor:
+            orgs.append({'usid':org['usid'],'name':org['name']})
+        return orgs
+
+    def org(self, usid):
+        data=self.db.organisations.find_one({'usid':usid})
+        data['_id']=str(data['_id'])
+        return data

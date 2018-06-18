@@ -12,7 +12,10 @@ def jwt_required(func):
             if(auth[0]=='Bearer'):
                 try:
                     payload=jwt.decode(auth[1],keys.jwt_secret)
-                    return func(payload)
+                    if(model.Organisations.exists(payload['usid'])==404):
+                        return (jsonify({'err':'organisation not found'}), 404)
+                    else:
+                        return func(payload)
                 except jwt.exceptions.DecodeError:
                     return (jsonify({'err':'invalid tokken'}), 400)
             else:
@@ -31,13 +34,21 @@ def routes(app):
         if(stat[1]!=200):
             return (jsonify({'err':'Invalid usid/password', 'status_code':401}), 401)
         token=jwt.encode({'usid':usid},keys.jwt_secret).decode("utf-8")
-        return jsonify({"access_token":token})
+        return jsonify({"access_token":token, 'info':stat[0]})
 
 
     @app.route('/auth/members',methods=['get'])
     @jwt_required
     def memauth(payload):
-        exists=model.Organisations.exists(payload['usid'])
-        if(exists==404):
-            return (jsonify({'err':'organisation not found'}), 404)
         return jsonify(payload)
+
+    # @app.route('/auth/members',methods=['get'])
+    # @jwt_required
+    # def delmem():
+    #     mem_reg=
+    #
+    #
+    @app.route('/auth/org',methods=['get'])
+    @jwt_required
+    def orga(payload):
+        return jsonify(model.Organisations.org(payload['usid']))
