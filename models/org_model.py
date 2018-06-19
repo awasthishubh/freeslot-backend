@@ -1,3 +1,7 @@
+def preturn(data):
+    data['_id']=str(data['_id'])
+    return data
+
 
 class Organisations():
     def __init__(self, _db):

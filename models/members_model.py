@@ -1,5 +1,7 @@
 from bson.objectid import ObjectId
-
+def preturn(data):
+    data['_id']=str(data['_id'])
+    return data
 class Members():
     def __init__(self, _db):
         self.db=_db
@@ -51,3 +53,24 @@ class Members():
             data['_id']=str(data['_id'])
             return 200
         return 500
+
+    def get(self,usid):
+        usid=usid.lower()
+        dataC=self.db.members.find({'org':usid})
+        if(dataC):
+            data=[]
+            for i in dataC:
+                i=preturn(i)
+                data.append(i)
+            return (data, 200)
+        else:
+            return (None, 404)
+
+    def delete(self,usid, reg):
+        usid=usid.lower()
+        reg=reg.upper()
+        data=self.db.members.delete_one({'org':usid, 'reg':reg})
+        if(data.deleted_count):
+            return ({'result':'sucess'}, 200)
+        else:
+            return (None, 404)

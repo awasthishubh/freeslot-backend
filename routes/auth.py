@@ -36,19 +36,24 @@ def routes(app):
         token=jwt.encode({'usid':usid},keys.jwt_secret).decode("utf-8")
         return jsonify({"access_token":token, 'info':stat[0]})
 
-
-    @app.route('/auth/members',methods=['get'])
-    @jwt_required
-    def memauth(payload):
-        return jsonify(payload)
-
-    # @app.route('/auth/members',methods=['get'])
-    # @jwt_required
-    # def delmem():
-    #     mem_reg=
-    #
-    #
     @app.route('/auth/org',methods=['get'])
     @jwt_required
     def orga(payload):
         return jsonify(model.Organisations.org(payload['usid']))
+
+    @app.route('/auth/members',methods=['get'])
+    @jwt_required
+    def memget(payload):
+        data=model.Members.get(payload['usid'])
+        if(data[1]==404):
+            return(jsonify({'err':'No match found for org and reg', 'status':404}), 404)
+        return (jsonify({'data':data[0], 'status':200}), 200)
+
+    @app.route('/auth/members',methods=['delete'])
+    @jwt_required
+    def memdel(payload):
+        reg=request.args['reg']
+        data=model.Members.delete(payload['usid'], reg)
+        if(data[1]==404):
+            return(jsonify({'err':'No match found for usid', 'status':404}), 404)
+        return (jsonify({'data':data[0], 'status':200}), 200)
