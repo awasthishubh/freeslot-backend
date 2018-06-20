@@ -53,7 +53,17 @@ def routes(app):
     @jwt_required
     def memdel(payload):
         reg=request.args['reg']
-        data=model.Members.delete(payload['usid'], reg)
-        if(data[1]==404):
+        stat=model.Members.delete(payload['usid'], reg)
+        if(stat==404):
             return(jsonify({'err':'No match found for usid', 'status':404}), 404)
-        return (jsonify({'data':data[0], 'status':200}), 200)
+        return (jsonify({'result':'deleted', 'status':200}), 200)
+
+    @app.route('/auth/members',methods=['put'])
+    @jwt_required
+    def verify(payload):
+        reg=request.args['reg']
+        stat=model.Members.verify(payload['usid'], reg)
+        if(stat==404):
+            return(jsonify({'err':'No match found for org and reg', 'status':404}), 404)
+        else:
+            return (jsonify({'result':'verified', 'status':200}), 200)

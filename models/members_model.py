@@ -71,6 +71,14 @@ class Members():
         reg=reg.upper()
         data=self.db.members.delete_one({'org':usid, 'reg':reg})
         if(data.deleted_count):
-            return ({'result':'sucess'}, 200)
+            return 200
         else:
-            return (None, 404)
+            return 404
+
+    def verify(self, usid, reg):
+        usid=usid.lower()
+        reg=reg.upper()
+        data=self.db.members.find_one({'org':usid, 'reg':reg})
+        if(not data): return 404
+        data=self.db.members.update({'org':usid, 'reg':reg},{'$set':{'verified':True}}, upsert=False)
+        return 200
