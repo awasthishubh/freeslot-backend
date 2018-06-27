@@ -1,6 +1,7 @@
 .DS_Store
 readme_assets
 local_keys.py
+.vscode
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

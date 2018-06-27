@@ -23,6 +23,10 @@ oauth.routes(app)
 #     print(err)
 #     return (jsonify({'err': 'Not found'}), 404)
 
+@app.after_request
+def setcores(response):
+    response.headers['Access-Control-Allow-Origin']='*'
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
