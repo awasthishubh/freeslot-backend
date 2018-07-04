@@ -26,6 +26,7 @@ oauth.routes(app)
 @app.after_request
 def setcores(response):
     response.headers['Access-Control-Allow-Origin']='*'
+    response.headers['Access-Control-Allow-Headers']='Content-Type'
     return response
 
 if __name__ == '__main__':

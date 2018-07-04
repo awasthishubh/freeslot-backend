@@ -8,7 +8,7 @@ class Organisations():
         self.db=_db
     def create(self, org, maintainer):
         data={
-            'usid': org['usid'],
+            'usid': org['usid'].lower(),
             'passwd': org['passwd'],
             'name': org['name'],
             'descr': org['descr'],
