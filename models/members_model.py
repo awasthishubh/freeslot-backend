@@ -20,31 +20,34 @@ class Members():
         data['org']=data['org'].lower()
         # if(exists(db,data['reg'],data['org'])):
         #     return 500
-        t3=[0,9,10,11,12,14,14,15,16,17,18,19,19,24]
+        # t3=[0,8,9,10,11,12,14,14,15,16,17,18,19,19,18,24]
         freeSlots=[]
-        freeTimming=[]
+        # freeTimming=[]
 
         for i in range(7):
             day=data['slots'][i*13:(i+1)*13]
-            freeSlot=[]
+            # freeSlot=[]
+            slot=[]
             for x in range(len(day)):
-                if(not day[x]):
-                    freeSlot.append(i*13+x)
-            freeSlots.append(freeSlot)
+                if(day[x]):
+                    slot.append(x)
+                # else:
+                #     freeSlot.append(x)
+            freeSlots.append(slot)
 
-            mod13=[x%13 for x in freeSlot]
-            j=0
-            freeT=[]
-            while(j<len(mod13)):
-                s=mod13[j]
-                while (j<len(mod13)-1 and mod13[j]+1==mod13[j+1]):
-                    j=j+1
-                e=mod13[j]+1
-                freeT.append((t3[s],t3[e]))
-                j+=1
-            freeTimming.append(freeT)
+            # j=0
+            # freeT=[]
+            # while(j<len(freeSlot)):
+            #     s=freeSlot[j]
+            #     while (j<len(freeSlot)-1 and freeSlot[j]+1==freeSlot[j+1]):
+            #         j=j+1
+            #     e=freeSlot[j]+1
+            #     freeT.append(t3[s])
+            #     freeT.append(t3[e])
+            #     j+=1
+            # freeTimming.append(freeT)
 
-        data['freeTimming']=freeTimming
+        # data['freeTimming']=freeTimming
         data['freeSlots']=freeSlots
         del data['slots']
         data['verified']=False
