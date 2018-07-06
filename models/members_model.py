@@ -18,38 +18,18 @@ class Members():
     def insert(self,data):
         data['reg']=data['reg'].upper()
         data['org']=data['org'].lower()
-        # if(exists(db,data['reg'],data['org'])):
-        #     return 500
-        # t3=[0,8,9,10,11,12,14,14,15,16,17,18,19,19,18,24]
-        freeSlots=[]
-        # freeTimming=[]
+        slots=[]
 
         for i in range(7):
             day=data['slots'][i*13:(i+1)*13]
-            # freeSlot=[]
             slot=[]
             for x in range(len(day)):
                 if(day[x]):
                     slot.append(x)
-                # else:
-                #     freeSlot.append(x)
-            freeSlots.append(slot)
+            slots.append(slot)
 
-            # j=0
-            # freeT=[]
-            # while(j<len(freeSlot)):
-            #     s=freeSlot[j]
-            #     while (j<len(freeSlot)-1 and freeSlot[j]+1==freeSlot[j+1]):
-            #         j=j+1
-            #     e=freeSlot[j]+1
-            #     freeT.append(t3[s])
-            #     freeT.append(t3[e])
-            #     j+=1
-            # freeTimming.append(freeT)
-
-        # data['freeTimming']=freeTimming
-        data['freeSlots']=freeSlots
         del data['slots']
+        data['slots']=slots
         data['verified']=False
         ins=self.db.members.insert_one(data)
         if(ins):
@@ -59,13 +39,18 @@ class Members():
 
     def get(self,usid):
         usid=usid.lower()
-        dataC=self.db.members.find({'org':usid})
-        if(dataC):
-            data=[]
+        dataC=self.db.members.find({'org':usid, 'verified': True})
+        dataV=self.db.members.find({'org':usid, 'verified': False})
+        if(dataC or dataV):
+            verified=[]
             for i in dataC:
                 i=preturn(i)
-                data.append(i)
-            return (data, 200)
+                verified.append(i)
+            unverified=[]
+            for i in dataV:
+                i=preturn(i)
+                unverified.append(i)
+            return ({'verified':verified,'unverified':unverified}, 200)
         else:
             return (None, 404)
 
@@ -85,3 +70,28 @@ class Members():
         if(not data): return 404
         data=self.db.members.update({'org':usid, 'reg':reg},{'$set':{'verified':True}}, upsert=False)
         return 200
+
+    def getmem(self, usid, start, end, point):
+        dataC=self.db.members.find({'org':usid, 'verified': True})
+        if(dataC):
+            data=[]
+            data2=[]
+            for i in dataC:
+                i=preturn(i)
+                # print(i)
+                print(start,end,point)
+                print(i['slots'][point])
+                okay=True
+                for j in range(start, end+1):
+                    if(j in i['slots'][point]):
+                        okay=False
+                        break
+                if(okay):
+                    data.append(i)
+                else: data2.append(i)
+
+            return ({'availableMem':data}, 200)
+        else:
+            return (None, 404)
+
+

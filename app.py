@@ -18,16 +18,22 @@ members.routes(app)
 auth.routes(app)
 oauth.routes(app)
 
-# @app.errorhandler(404)
-# def err400(err):
-#     print(err)
-#     return (jsonify({'err': 'Not found'}), 404)
+# @app.errorhandler(500)
+# def err500(err):
+#     response = flask.Response(jsonify({'err': err}), status= 500)
+#     response.headers['Access-Control-Allow-Headers']='Content-Type'
+#     response.headers['Access-Control-Allow-Origin']='*'
+#     return response
 
 @app.after_request
 def setcores(response):
     response.headers['Access-Control-Allow-Origin']='*'
-    response.headers['Access-Control-Allow-Headers']='Content-Type'
+    # response.headers['Access-Control-Allow-Headers']='Content-Type'
+    response.headers["Access-Control-Allow-Headers"]= "authorization, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+    response.headers['Access-Control-Allow-Methods']='GET, PUT, POST, DELETE, PATCH, OPTIONS'
+    response.headers["Access-Control-Allow-Credentials"]= "true"
     return response
 
 if __name__ == '__main__':
+    # app.run()
     app.run(debug=True)
