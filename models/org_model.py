@@ -12,6 +12,7 @@ class Organisations():
             'passwd': org['passwd'],
             'name': org['name'],
             'descr': org['descr'],
+            'dp': org['dp'],
             'maintainer_name': maintainer['name'],
             'maintainer_email': maintainer['email'],
             'maintainer_photo': maintainer['picture'],

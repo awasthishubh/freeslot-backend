@@ -45,10 +45,12 @@ class Members():
             verified=[]
             for i in dataC:
                 i=preturn(i)
+                i['visible']=True
                 verified.append(i)
             unverified=[]
             for i in dataV:
                 i=preturn(i)
+                i['visible']=True
                 unverified.append(i)
             return ({'verified':verified,'unverified':unverified}, 200)
         else:
