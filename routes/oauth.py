@@ -57,7 +57,7 @@ def routes(app):
         url=state['redirect']+"#token="+stat[0]['token']
         return ("""
         <script>
-            opener.postMessage('"""+stat[0]['token']+"""',"*");
+            opener.postMessage({token:'"""+stat[0]['token']+"""'},"*");
             window.close()
         </script>
          """)
