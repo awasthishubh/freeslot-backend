@@ -55,5 +55,10 @@ def routes(app):
             return(jsonify({'status':409, 'err':'User Already Exists'}),409)
         stat[0]['token']=jwt.encode({'usid':stat[0]['usid']},keys.jwt_secret).decode("utf-8")
         url=state['redirect']+"#token="+stat[0]['token']
-        return redirect(url, code=302)
+        return ("""
+        <script>
+            opener.postMessage('"""+stat[0]['token']+"""',"*");
+            window.close()
+        </script>
+         """)
         # return(jsonify({'status':stat[1], 'data':stat[0]}),stat[1])
