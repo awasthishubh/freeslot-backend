@@ -23,6 +23,7 @@ def routes(app):
                 'org':data['org'],
                 'email':data['email'],
                 'phno':data['phno'],
+                'rmno':data['rmno'],
                 'slots':slots
             }
             stat=model.Members.insert(details)
