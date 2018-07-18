@@ -1,4 +1,5 @@
 import sys
+import os
 sys.path.insert(0, './routes/addons')
 sys.path.insert(0, './routes')
 sys.path.insert(0, './config')
@@ -34,6 +35,9 @@ def setcores(response):
     response.headers["Access-Control-Allow-Credentials"]= "true"
     return response
 
+debug=False
+if('HEROKU' not in os.environ):
+    debug=True
+
 if __name__ == '__main__':
-    # app.run()
-    app.run(debug=True)
+    app.run(debug=debug)
