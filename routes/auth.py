@@ -1,5 +1,5 @@
 from flask import jsonify, Response, request
-import jwt, functools, sys
+import jwt, functools, sys, hashlib
 from keys import keys
 import model
 
@@ -29,7 +29,8 @@ def routes(app):
     @app.route('/auth',methods=['get','post'])
     def auth():
         usid=request.form['usid']
-        passwd=request.form['passwd']
+        passwd=hashlib.md5(request.form['passwd'].encode()).hexdigest()
+        print(request.form['passwd'],passwd)
         stat=model.Organisations.auth({'usid':usid, 'passwd':passwd})
         if(stat[1]!=200):
             return (jsonify({'err':'Invalid usid/password', 'status_code':401}), 401)

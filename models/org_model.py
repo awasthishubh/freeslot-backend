@@ -6,19 +6,7 @@ def preturn(data):
 class Organisations():
     def __init__(self, _db):
         self.db=_db
-    def create(self, org, maintainer):
-        data={
-            'usid': org['usid'].lower(),
-            'passwd': org['passwd'],
-            'name': org['name'],
-            'descr': org['descr'],
-            'dp': org['dp'],
-            'maintainer_name': maintainer['name'],
-            'maintainer_email': maintainer['email'],
-            'maintainer_photo': maintainer['picture'],
-            'maintainer_id': maintainer['id']
-        }
-
+    def create(self, data):
         exists=self.db.organisations.find_one({'usid':data['usid']})
         if(exists):
             return(data, 409)
