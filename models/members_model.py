@@ -1,7 +1,21 @@
 from bson.objectid import ObjectId
+from pymongo import ASCENDING
+
 def preturn(data):
     data['_id']=str(data['_id'])
     return data
+
+def tocsv(data):
+    data2="SNo,Reg,Name,Email,Phno,RoomNo\n"
+    for i in data:
+        data2+=str(data.index(i)+1)+','
+        data2+=i['reg']+','
+        data2+=i['name']+','
+        data2+=i['email']+','
+        data2+=i['phno']+','
+        data2+=str(i['rmno'])+'\n'
+    return data2
+
 class Members():
     def __init__(self, _db):
         self.db=_db
@@ -93,6 +107,19 @@ class Members():
                 else: data2.append(i)
 
             return ({'availableMem':data}, 200)
+        else:
+            return (None, 404)
+
+    def csv(self, usid):
+        usid=usid.lower()
+        dataC=self.db.members.find({'org':usid, 'verified': True}).sort([("reg", ASCENDING)])
+        if(dataC):
+            verified=[]
+            for i in dataC:
+                i=preturn(i)
+                i['visible']=True
+                verified.append(i)
+            return (tocsv(verified), 200)
         else:
             return (None, 404)
 

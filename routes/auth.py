@@ -97,3 +97,12 @@ def routes(app):
         if(data[1]==404):
             return(jsonify({'err':'No match found for org and reg', 'status':404}), 404)
         return (jsonify({'data':data[0], 'status':200}), 200)
+
+    @app.route('/auth/members/download',methods=['get'])
+    @jwt_required
+    def downloadcsv(payload):
+        data=model.Members.csv(payload['usid'])
+        resp = Response(data[0])
+        resp.headers['Content-Type']="text/csv"
+        resp.headers['Content-Disposition']='attachment; filename="'+payload['usid']+'_members.csv"'
+        return resp
