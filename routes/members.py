@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, Response, request
 import sys, string, random, os
-# from TT_SLOT import findSlot
-from preproc_beta import preproc
+from TT_SLOT import slotBits
+# from preproc_beta import preproc
 import model
 
 def routes(app):
@@ -16,7 +16,7 @@ def routes(app):
         f = request.files['timeTable']
         f.save('./tmp/'+name+'.png')
         # slots=findSlot('./tmp/'+name+'.png')
-        slots=preproc('./tmp/'+name+'.png')
+        slots=slotBits('./tmp/'+name+'.png')
         os.remove('./tmp/'+name+'.png')
         if(slots):
             details={
