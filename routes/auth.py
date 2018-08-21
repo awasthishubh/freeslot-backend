@@ -26,35 +26,7 @@ def jwt_required(func):
 ################################################
 
 def routes(app):
-    @app.route('/auth',methods=['get','post'])
-    def auth():
-        usid=request.form['usid']
-        passwd=hashlib.md5(request.form['passwd'].encode()).hexdigest()
-        print(request.form['passwd'],passwd)
-        stat=model.Organisations.auth({'usid':usid, 'passwd':passwd})
-        if(stat[1]!=200):
-            return (jsonify({'err':'Invalid usid/password', 'status_code':401}), 401)
-        token=jwt.encode({'usid':usid},keys.jwt_secret).decode("utf-8")
-        return jsonify({"access_token":token, 'info':stat[0]})
-
-    @app.route('/auth', methods=['put'])
-    def authPut():
-        data={}
-        data['descr']=request.form['descr']
-        data['dp']=request.form['dp']
-        data['name']=request.form['name']
-        data['passwd']=hashlib.md5(request.form['passwd'].encode()).hexdigest()
-        data['usid']=request.form['usid']
-        if('newPasswd' in request.form.keys() and request.form['newPasswd']):
-            data['newPasswd']=hashlib.md5(request.form['newPasswd'].encode()).hexdigest()
-        else: data['newPasswd']=data['passwd']
-        stat=model.Organisations.update(data)
-        if(stat):
-            return (jsonify({'msg':'sucess'}),200)
-        else:   return (jsonify({'err':'invalid usid/pass'}), 401)
-            
-
-
+    
     @app.route('/auth/org',methods=['get'])
     @jwt_required
     def orga(payload):

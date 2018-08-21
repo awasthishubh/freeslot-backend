@@ -17,8 +17,8 @@ class Organisations():
             return (data,200)
 
     def auth(self,data):
-        user=self.db.organisations.find_one({'usid':data['usid']})
-        if(user and user['passwd']==data['passwd']):
+        user=self.db.organisations.find_one({'usid':data['usid'], 'passwd': data['passwd']})
+        if(user):
             user['_id']=str(user['_id'])
             if('passwd' in data.keys()): del data['passwd']
             return (user,200)

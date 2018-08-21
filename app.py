@@ -5,7 +5,7 @@ sys.path.insert(0, './routes')
 sys.path.insert(0, './config')
 sys.path.insert(0, './models')
 from flask import Flask, jsonify, Response, request
-import members, auth, oauth
+import members, auth, oauth, org
 app = Flask(__name__)
 from keys import keys
 
@@ -18,6 +18,7 @@ def index():
 members.routes(app)
 auth.routes(app)
 oauth.routes(app)
+org.routes(app)
 
 # @app.errorhandler(500)
 # def err500(err):
