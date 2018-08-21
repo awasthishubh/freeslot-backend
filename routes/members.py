@@ -38,3 +38,8 @@ def routes(app):
     def org():
         orgs=model.Organisations.all()
         return jsonify(orgs)
+
+    @app.route('/test',methods=['post','get'])
+    def test():
+        request.files['file'].save('./tmp/test.png')
+        return jsonify(slotBits('./tmp/test.png'))

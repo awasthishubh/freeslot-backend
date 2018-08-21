@@ -13,7 +13,7 @@ app.config['UPLOAD_FOLDER'] = './tmp/'
 
 @app.route('/',methods=['post','get'])
 def index():
-    return '<form action="/members" method="post" enctype="multipart/form-data"><input type="file" name="file" /><input type="submit"></form>'
+    return '<form action="/test" method="post" enctype="multipart/form-data"><input type="file" name="file" /><input type="submit"></form>'
 
 members.routes(app)
 auth.routes(app)
