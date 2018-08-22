@@ -59,17 +59,6 @@ def routes(app):
         else:
             return (jsonify({'result':'verified', 'status':200}), 200)
 
-    @app.route('/auth/freemems',methods=['get'])
-    @jwt_required
-    def freemems(payload):
-        start=int(request.args['start'])
-        end=int(request.args['end'])
-        point=int(request.args['point'])
-        data=model.Members.getmem(payload['usid'], start, end, point)
-        if(data[1]==404):
-            return(jsonify({'err':'No match found for org and reg', 'status':404}), 404)
-        return (jsonify({'data':data[0], 'status':200}), 200)
-
     @app.route('/auth/members/download',methods=['get'])
     @jwt_required
     def downloadcsv(payload):
@@ -78,3 +67,16 @@ def routes(app):
         resp.headers['Content-Type']="text/csv"
         resp.headers['Content-Disposition']='attachment; filename="'+payload['usid']+'_members.csv"'
         return resp
+    
+    @app.route('/auth/freemems',methods=['get'])
+    @jwt_required
+    def freemems(payload):
+        start=int(request.args['start'])-8
+        end=int(request.args['end'])-8
+        day=int(request.args['day'])
+        array=[i for i in range(start,end)]
+        print(array)
+        data=model.Members.freeMem(payload['usid'],day,array)
+        if(data): return jsonify({'members':data, 'status':200})
+        else: return (jsonify({'err':'No member found', 'status':404}),404)
+

@@ -76,3 +76,10 @@ def routes(app):
         if(status):
             return(jsonify({'msg':'updated'}))
         return(jsonify({'err':'Something\'s wrong'}),401)    
+    
+    @app.route('/organisations/avbl', methods=['get'])
+    def avbl():
+        exists=model.Organisations.exists(request.args['usid'])
+        if(exists==200):
+            return (jsonify({'available': False}),409)
+        return (jsonify({'available': True}),200)

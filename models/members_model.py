@@ -87,29 +87,7 @@ class Members():
         data=self.db.members.update({'org':usid, 'reg':reg},{'$set':{'verified':True}}, upsert=False)
         return 200
 
-    def getmem(self, usid, start, end, point):
-        dataC=self.db.members.find({'org':usid, 'verified': True})
-        if(dataC):
-            data=[]
-            data2=[]
-            for i in dataC:
-                i=preturn(i)
-                # print(i)
-                print(start,end,point)
-                print(i['slots'][point])
-                okay=True
-                for j in range(start, end+1):
-                    if(j in i['slots'][point]):
-                        okay=False
-                        break
-                if(okay):
-                    data.append(i)
-                else: data2.append(i)
-
-            return ({'availableMem':data}, 200)
-        else:
-            return (None, 404)
-
+    
     def csv(self, usid):
         usid=usid.lower()
         dataC=self.db.members.find({'org':usid, 'verified': True}).sort([("reg", ASCENDING)])
@@ -122,5 +100,13 @@ class Members():
             return (tocsv(verified), 200)
         else:
             return (None, 404)
+
+    def freeMem(self,usid,day,slots):
+        data=self.db.members.find({'org':usid, "slots."+str(day) : {"$not": {"$elemMatch" :{"$in": slots}}}}).sort([("reg", ASCENDING)])
+        if(not data): return None
+        members=[]
+        for i in data:
+            members.append(preturn(i))
+        return members
 
 
