@@ -57,3 +57,13 @@ class Organisations():
         if('passwd' in data.keys()): del data['passwd']
         data['_id']=str(data['_id'])
         return data
+
+    def patch(self,data):
+        data['usid']=data['usid'].lower()
+        user=self.db.organisations.update_one({
+            'usid':data['usid'],
+        },{
+            '$set': data
+        }, upsert=False)
+
+        return user.matched_count

@@ -54,4 +54,25 @@ def routes(app):
             return (jsonify({'msg':'sucess'}),200)
         else:   return (jsonify({'err':'invalid usid/pass'}), 401)
 
-    
+    @app.route('/auth', methods=['patch'])
+    def authPatch():
+        allowedField=['name', 'descr','dp','newPasswd','usid','passwd']
+
+        stat=model.Organisations.auth({'usid':request.form['usid'], 'passwd':hashlib.md5(request.form['passwd'].encode()).hexdigest()})
+        if(stat[1]!=200):
+            return (jsonify({'err':'Invalid usid/password', 'status_code':401}), 401)
+        data={k: v for k, v in request.form.items()}
+
+        del data['passwd']
+
+        if('newPasswd' in list(request.form.keys())):
+            data['passwd']=hashlib.md5(data['newPasswd'].encode()).hexdigest()
+            del data['newPasswd']
+
+        for i in list(request.form.keys()):
+            if(i not in allowedField):
+                return (jsonify({'err':'invalid field'}, request.form),401)
+        status=model.Organisations.patch(data)
+        if(status):
+            return(jsonify({'msg':'updated'}))
+        return(jsonify({'err':'Something\'s wrong'}),401)    
