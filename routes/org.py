@@ -25,18 +25,18 @@ def routes(app):
             return(jsonify({'status':409, 'err':'User Already Exists'}),409)
         token=jwt.encode({'usid':stat[0]['usid']},keys.jwt_secret).decode("utf-8")
         print(stat[0])
-        return jsonify({'data':stat[0],'token':token})
+        return jsonify({'data':stat[0],'token':token, 'status':200})
 
-    @app.route('/auth',methods=['get','post'])
+    @app.route('/auth',methods=['post'])
     def auth():
         usid=request.form['usid']
         passwd=hashlib.md5(request.form['passwd'].encode()).hexdigest()
         print(request.form['passwd'],passwd)
         stat=model.Organisations.auth({'usid':usid, 'passwd':passwd})
         if(stat[1]!=200):
-            return (jsonify({'err':'Invalid usid/password', 'status_code':401}), 401)
+            return (jsonify({'err':'Invalid usid/password', 'status':401}), 401)
         token=jwt.encode({'usid':usid},keys.jwt_secret).decode("utf-8")
-        return jsonify({"access_token":token, 'info':stat[0]})
+        return jsonify({"access_token":token, 'info':stat[0], 'status':200})
 
     @app.route('/auth', methods=['put'])
     def authPut():
@@ -51,8 +51,8 @@ def routes(app):
         else: data['newPasswd']=data['passwd']
         stat=model.Organisations.update(data)
         if(stat):
-            return (jsonify({'msg':'sucess'}),200)
-        else:   return (jsonify({'err':'invalid usid/pass'}), 401)
+            return (jsonify({'msg':'sucess', 'status':200}),200)
+        else:   return (jsonify({'err':'invalid usid/pass', 'status':401}), 401)
 
     @app.route('/auth', methods=['patch'])
     def authPatch():
@@ -60,7 +60,7 @@ def routes(app):
 
         stat=model.Organisations.auth({'usid':request.form['usid'], 'passwd':hashlib.md5(request.form['passwd'].encode()).hexdigest()})
         if(stat[1]!=200):
-            return (jsonify({'err':'Invalid usid/password', 'status_code':401}), 401)
+            return (jsonify({'err':'Invalid usid/password', 'status':401}), 401)
         data={k: v for k, v in request.form.items()}
 
         del data['passwd']
@@ -71,11 +71,11 @@ def routes(app):
 
         for i in list(request.form.keys()):
             if(i not in allowedField):
-                return (jsonify({'err':'invalid field'}, request.form),401)
+                return (jsonify({'err':'invalid field', 'status':400}),400)
         status=model.Organisations.patch(data)
         if(status):
-            return(jsonify({'msg':'updated'}))
-        return(jsonify({'err':'Something\'s wrong'}),401)    
+            return(jsonify({'msg':'updated', 'status':200}))
+        return(jsonify({'err':'Something\'s wrong', 'status':400}),400)    
     
     @app.route('/organisations/avbl', methods=['get'])
     def avbl():

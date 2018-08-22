@@ -51,22 +51,29 @@ class Members():
             return 200
         return 500
 
-    def get(self,usid):
+    def getmem(self,usid):
         usid=usid.lower()
-        dataC=self.db.members.find({'org':usid, 'verified': True})
-        dataV=self.db.members.find({'org':usid, 'verified': False})
-        if(dataC or dataV):
+        data=self.db.members.find({'org':usid, 'verified': True}).sort([("reg", ASCENDING)])
+        if(data):
             verified=[]
-            for i in dataC:
+            for i in data:
                 i=preturn(i)
                 i['visible']=True
                 verified.append(i)
+            return (verified, 200)
+        else:
+            return (None, 404)
+    
+    def getreq(self,usid):
+        usid=usid.lower()
+        data=self.db.members.find({'org':usid, 'verified': False}).sort([("reg", ASCENDING)])
+        if(data):
             unverified=[]
-            for i in dataV:
+            for i in data:
                 i=preturn(i)
                 i['visible']=True
                 unverified.append(i)
-            return ({'verified':verified,'unverified':unverified}, 200)
+            return (unverified, 200)
         else:
             return (None, 404)
 

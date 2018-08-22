@@ -30,14 +30,25 @@ def routes(app):
     @app.route('/auth/org',methods=['get'])
     @jwt_required
     def orga(payload):
-        return jsonify(model.Organisations.org(payload['usid']))
+        data=model.Organisations.org(payload['usid'])
+        if(data):
+            return jsonify({'details':data, 'status':200})
+        return jsonify({'err':'Organisation not found', 'status':404})
+
+    @app.route('/auth/requests',methods=['get'])
+    @jwt_required
+    def reqget(payload):
+        data=model.Members.getreq(payload['usid'])
+        if(data[1]==404):
+            return(jsonify({'err':'No request found under your organisation', 'status':404}), 404)
+        return (jsonify({'data':data[0], 'status':200}), 200)
 
     @app.route('/auth/members',methods=['get'])
     @jwt_required
     def memget(payload):
-        data=model.Members.get(payload['usid'])
+        data=model.Members.getmem(payload['usid'])
         if(data[1]==404):
-            return(jsonify({'err':'No match found for org and reg', 'status':404}), 404)
+            return(jsonify({'err':'No member found under your organisation', 'status':404}), 404)
         return (jsonify({'data':data[0], 'status':200}), 200)
 
     @app.route('/auth/members',methods=['delete'])
@@ -49,7 +60,7 @@ def routes(app):
             return(jsonify({'err':'No match found for usid', 'status':404}), 404)
         return (jsonify({'result':'deleted', 'status':200}), 200)
 
-    @app.route('/auth/members',methods=['put'])
+    @app.route('/auth/requests',methods=['put'])
     @jwt_required
     def verify(payload):
         reg=request.args['reg']
