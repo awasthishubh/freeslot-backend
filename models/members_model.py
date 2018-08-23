@@ -116,4 +116,10 @@ class Members():
             members.append(preturn(i))
         return members
 
+    def mem(self, usid, reg):
+        data=self.db.members.find_one({'org':usid, 'reg': reg})
+        if(not data): return(None,404)
+        else:
+            return (preturn(data),200)
+
 

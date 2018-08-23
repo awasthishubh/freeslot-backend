@@ -46,10 +46,17 @@ def routes(app):
     @app.route('/auth/members',methods=['get'])
     @jwt_required
     def memget(payload):
-        data=model.Members.getmem(payload['usid'])
-        if(data[1]==404):
-            return(jsonify({'err':'No member found under your organisation', 'status':404}), 404)
-        return (jsonify({'data':data[0], 'status':200}), 200)
+        if('reg' in request.args.keys()):
+            reg=request.args['reg']
+            data=model.Members.mem(payload['usid'], reg)
+            if(data[1]==404):
+                return(jsonify({'err':'No match found for usid', 'status':404}), 404)
+            return (jsonify({'member':data[0], 'status':200}), 200)
+        else:
+            data=model.Members.getmem(payload['usid'])
+            if(data[1]==404):
+                return(jsonify({'err':'No member found under your organisation', 'status':404}), 404)
+            return (jsonify({'data':data[0], 'status':200}), 200)
 
     @app.route('/auth/members',methods=['delete'])
     @jwt_required
@@ -90,4 +97,32 @@ def routes(app):
         data=model.Members.freeMem(payload['usid'],day,array)
         if(data): return jsonify({'members':data, 'status':200})
         else: return (jsonify({'err':'No member found', 'status':404}),404)
+
+    # @app.route('/auth/member',methods=['get'])
+    # @jwt_required
+    # def mem(payload):
+        
+    
+    @app.route('/auth/members/stats',methods=['get'])
+    @jwt_required
+    def memstat(payload):
+        members=model.Members.getmem(payload['usid'])
+        requests=model.Members.getreq(payload['usid'])
+        # return jsonify(members[0])
+        stats={
+            'requests':len(requests[0]),
+            'members':0,
+            'firstYr':0,
+            'SecondYr':0,
+            'ThirdYr':0,
+            'fourthYr':0
+        }
+        for i in members[0]:
+            stats['members']+=1
+            if(i['reg'][0:2]=='18'):
+                stats['firstYr']+=1
+            if(i['reg'][0:2]=='17'): stats['SecondYr']+=1
+            if(i['reg'][0:2]=='16'): stats['ThirdYr']+=1
+            if(i['reg'][0:2]=='15'): stats['fourthYr']+=1
+        return jsonify(stats)
 
