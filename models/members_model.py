@@ -36,6 +36,8 @@ class Members():
 
         for i in range(7):
             day=data['slots'][i*13:(i+1)*13]
+            day[5]=0
+            del day[11]
             slot=[]
             for x in range(len(day)):
                 if(day[x]):

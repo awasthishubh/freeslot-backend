@@ -126,3 +126,17 @@ def routes(app):
             if(i['reg'][0:2]=='15'): stats['fourthYr']+=1
         return jsonify(stats)
 
+    @app.route('/auth/members/timestat',methods=['get'])
+    @jwt_required
+    def freetime(payload):
+        slots=[{i+8:0 for i in range(13)} for j in range(7)]
+        members=model.Members.getmem(payload['usid'])
+        for i in members[0]:
+            for j in range(7):
+                for k in i['slots'][j]:
+                    # if(j==5):# and k==5):
+                    #     print(i)
+                    slots[j][k+8]+=1
+                
+        return jsonify(slots)
+
