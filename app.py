@@ -4,16 +4,18 @@ sys.path.insert(0, './routes/addons')
 sys.path.insert(0, './routes')
 sys.path.insert(0, './config')
 sys.path.insert(0, './models')
-from flask import Flask, jsonify, Response, request
+from flask import Flask, jsonify, Response, request, send_from_directory
 import members, auth, oauth, org
 app = Flask(__name__)
 from keys import keys
 
 app.config['UPLOAD_FOLDER'] = './tmp/'
 
+
 @app.route('/',methods=['post','get'])
-def index():
-    return '<form action="/test" method="post" enctype="multipart/form-data"><input type="file" name="file" /><input type="submit"></form>'
+def index2():
+    response = send_from_directory(directory='./view', filename='index.html')
+    return response
 
 members.routes(app)
 auth.routes(app)

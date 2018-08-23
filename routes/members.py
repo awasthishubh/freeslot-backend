@@ -34,7 +34,10 @@ def routes(app):
             return(jsonify({'status':200, 'data':details}),200)
         return (jsonify({'err':'bad file'}),400)
 
-    @app.route('/test',methods=['post','get'])
+    @app.route('/test',methods=['post'])
     def test():
         request.files['file'].save('./tmp/test.png')
         return jsonify(slotBits('./tmp/test.png'))
+    @app.route('/test',methods=['get'])
+    def sd():
+        return '<form action="/test" method="post" enctype="multipart/form-data"><input type="file" name="file" /><input type="submit"></form>'

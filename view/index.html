@@ -1,0 +1,167 @@
+<html>
+<head><title>FreeSlot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body class="markdown-body" style="
+margin: 0 10%; font-size: 15px;
+">
+<h1><a id="FreeSlot_0"></a>FreeSlot</h1>
+<h3><a id="Routeemsporganisations_1"></a>Route: ‘/organisations’</h3>
+<h5><a id="Method_2"></a>Method:</h5>
+<ul>
+<li>POST:
+<ul>
+<li>Register an organisation</li>
+<li>Required Fields: <code>name</code>, <code>usid</code>, <code>passwd</code></li>
+<li>Optional Fields: <code>descr</code>, <code>dp</code></li>
+</ul>
+</li>
+<li>GET:
+<ul>
+<li>Get all the registered organisation</li>
+</ul>
+</li>
+</ul>
+<p>On sucessful registration, a <code>JSON token</code> will be returned which need to be send as  <code>Bearer token</code> in subsequent requests for authorisation</p>
+<hr>
+<h3><a id="Routeemsporganisationsavbl_14"></a>Route: ‘/organisations/avbl’</h3>
+<h5><a id="Method_15"></a>Method:</h5>
+<ul>
+<li>GET:
+<ul>
+<li>Checks the availability of usid</li>
+<li>send usid as parameter in url</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3><a id="Routeemspauth_22"></a>Route: ‘/auth’</h3>
+<h5><a id="Method_23"></a>Method:</h5>
+<ul>
+<li>POST:
+<ul>
+<li>Login for an organisation</li>
+<li>Required Fields (as form-data or url-encoded in request body)
+<ul>
+<li>usid</li>
+<li>passwd</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>PATCH:
+<ul>
+<li>Update details of organisation</li>
+<li>Send <code>usid</code>, <code>passwd</code> along with the fields that need to be updated</li>
+<li>Fields that can be send/updated: <code>name</code>, <code>descr</code>, <code>dp</code>, <code>newPasswd</code>(for updating passwd)</li>
+</ul>
+</li>
+</ul>
+<p>On sucessful login, a <code>JSON token</code> will be returned which need to be send as  <code>Bearer token</code> in subsequent requests for authorisation</p>
+<hr>
+<h3><a id="Routeemspmembers_37"></a>Route: ‘/members’</h3>
+<h5><a id="Method_38"></a>Method:</h5>
+<ul>
+<li>POST:
+<ul>
+<li>Post details of a member for registration</li>
+<li>Required Fields (to be send as form data):
+<ul>
+<li>name</li>
+<li>reg</li>
+<li>org</li>
+<li>email</li>
+<li>phno</li>
+<li>rmno</li>
+<li>timeTable <code>Screenshot of time table</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3><a id="Routeemspauthorgemsp_Bearer_token_required_50"></a>Route: ‘/auth/org’  <code>Bearer token required</code></h3>
+<h5><a id="Method_51"></a>Method:</h5>
+<ul>
+<li>GET:
+<ul>
+<li>Get details of authenticated organisation</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3><a id="Routeemspauthmembers_emsp_Bearer_token_required_56"></a>Route: ‘/auth/members’   <code>Bearer token required</code></h3>
+<h5><a id="Method_57"></a>Method:</h5>
+<ul>
+<li>GET:
+<ul>
+<li>Get details of members of authenticated organisation</li>
+<li>if u need to get details of a particular member, send <code>?reg=17XXX23X</code> as query parameter</li>
+</ul>
+</li>
+<li>DELETE
+<ul>
+<li>Delete a member or request</li>
+<li>Send <code>reg=17XXX2345</code> as query parameter</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3><a id="Routeemspauthrequests_emsp_Bearer_token_required_66"></a>Route: ‘/auth/requests’   <code>Bearer token required</code></h3>
+<h5><a id="Method_67"></a>Method:</h5>
+<ul>
+<li>GET:
+<ul>
+<li>Get All pending requests of authenticated organisation</li>
+</ul>
+</li>
+<li>PUT:
+<ul>
+<li>Accept/Verify a member</li>
+<li>Send <code>reg=17XXX2345</code> as query parameter</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3><a id="Routeemspauthfreememsemsp_Bearer_token_required_74"></a>Route: ‘/auth/freemems’  <code>Bearer token required</code></h3>
+<h5><a id="Method_75"></a>Method:</h5>
+<ul>
+<li>GET:
+<ul>
+<li>Get all the members who are free during specified day/time</li>
+<li>Following fields (with integer as value) need to be send as query parameter
+<ul>
+<li><code>start</code>: Start hour of time interval in 24hr format</li>
+<li><code>end</code>: End hour of time interval in 24hr format</li>
+<li><code>day</code>: Day of the week <code>0 for monday, 6 for sunday</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>eg. if you need to find members who are free on wednesday from 11:00 AM to 4:00 PM<br>
+send <code>?start=11&amp;end=16&amp;day=2</code> as query parameter</p>
+<hr>
+<h3><a id="Routeemspauthmembersstatsemsp_Bearer_token_required_87"></a>Route: ‘/auth/members/stats’  <code>Bearer token required</code></h3>
+<h5><a id="Method_88"></a>Method:</h5>
+<ul>
+<li>GET:
+<ul>
+<li>Get statistics about registered member of your organisation</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3><a id="Routeemspauthmembersdownloademsp_Bearer_token_required_92"></a>Route: ‘/auth/members/download’  <code>Bearer token required</code></h3>
+<h5><a id="Method_93"></a>Method:</h5>
+<ul>
+<li>GET:
+<ul>
+<li>Download details of all members as an CSV file</li>
+</ul>
+</li>
+</ul>
+<hr>
+</body>
+</html>
