@@ -113,16 +113,15 @@ def routes(app):
             'requests':len(requests[0]),
             'members':0,
             'firstYr':0,
-            'SecondYr':0,
-            'ThirdYr':0,
+            'secondYr':0,
+            'thirdYr':0,
             'fourthYr':0
         }
         for i in members[0]:
             stats['members']+=1
-            if(i['reg'][0:2]=='18'):
-                stats['firstYr']+=1
-            if(i['reg'][0:2]=='17'): stats['SecondYr']+=1
-            if(i['reg'][0:2]=='16'): stats['ThirdYr']+=1
+            if(i['reg'][0:2]=='18'): stats['firstYr']+=1
+            if(i['reg'][0:2]=='17'): stats['secondYr']+=1
+            if(i['reg'][0:2]=='16'): stats['thirdYr']+=1
             if(i['reg'][0:2]=='15'): stats['fourthYr']+=1
         return jsonify(stats)
 
