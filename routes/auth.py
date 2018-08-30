@@ -92,6 +92,7 @@ def routes(app):
         start=int(request.args['start'])-8
         end=int(request.args['end'])-8
         day=int(request.args['day'])
+        if(start>end or start>16 or end>16 or start==end): return (jsonify({'err':'Invalid start, end time', 'status':400}),400)
         array=[i for i in range(start,end)]
         print(array)
         data=model.Members.freeMem(payload['usid'],day,array)

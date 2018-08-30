@@ -125,12 +125,19 @@ def slotBits(loc):
 
 		##rotating the array
 		slot_state = np.rot90(slot_state, 2, (0,1))
+		##Adding extra slot for lab
+		for i in range(1,14,2):
+			if(slot_state[i][4]):
+				slot_state[i][3]=1
+			if(slot_state[i][10]):
+				slot_state[i][9]=1
 
+		###
 		a = 0
 		while a < 13:
 			b = 0
 			while b < 13:
-				final_list.append(int(slot_state[a,b] + slot_state[a+1, b]))
+				final_list.append(int(slot_state[a,b]) or int(slot_state[a+1, b]))
 				b = b + 1
 			a = a + 2
 
