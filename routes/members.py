@@ -8,7 +8,7 @@ def routes(app):
     @app.route('/members',methods=['post'])
     def memindex():
         if(model.Organisations.exists(request.form['org'])==404):
-            return(jsonify({'status':404, 'err':'Ogranisation not found'}),409)
+            return(jsonify({'status':404, 'err':'Ogranisation not found'}),404)
         if(model.Members.exists(request.form['reg'],request.form['org'])):
             return(jsonify({'status':409, 'err':'User Already registered under the organisation'}),409)
         name=''.join(random.choices(string.ascii_uppercase + string.digits, k=10))

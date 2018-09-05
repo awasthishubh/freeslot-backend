@@ -20,7 +20,7 @@ class Organisations():
         user=self.db.organisations.find_one({'usid':data['usid'], 'passwd': data['passwd']})
         if(user):
             user['_id']=str(user['_id'])
-            if('passwd' in data.keys()): del data['passwd']
+            if('passwd' in user.keys()): del user['passwd']
             return (user,200)
         else:
             return (None,401)
