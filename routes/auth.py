@@ -31,6 +31,9 @@ def routes(app):
     @jwt_required
     def orga(payload):
         data=model.Organisations.org(payload['usid'])
+        gravatar=data['gravatar'] if 'gravatar' in data.keys() and data['gravatar'] else data['name'] #For random color
+        hash=hashlib.md5(gravatar.encode()).hexdigest()
+        data['dp']='https://www.gravatar.com/avatar/'+hash+'?d=retro&s=500'
         if(data):
             return jsonify({'details':data, 'status':200})
         return jsonify({'err':'Organisation not found', 'status':404})
