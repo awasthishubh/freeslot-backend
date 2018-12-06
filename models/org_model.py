@@ -7,7 +7,7 @@ class Organisations():
     def __init__(self, _db):
         self.db=_db
     def create(self, data):
-        exists=self.db.organisations.find_one({'usid':data['usid']})
+        exists=self.db.organisations.find_one({'usid':data['usid'].lower()})
         if(exists):
             return(data, 409)
         else:
@@ -17,7 +17,7 @@ class Organisations():
             return (data,200)
 
     def auth(self,data):
-        user=self.db.organisations.find_one({'usid':data['usid'], 'passwd': data['passwd']})
+        user=self.db.organisations.find_one({'usid':data['usid'].lower(), 'passwd': data['passwd']})
         if(user):
             user['_id']=str(user['_id'])
             if('passwd' in user.keys()): del user['passwd']
@@ -27,7 +27,7 @@ class Organisations():
 
     def update(self, data):
         user=self.db.organisations.update_one({
-            'usid':data['usid'],
+            'usid':data['usid'].lower(),
             'passwd':data['passwd']
         },{
             '$set': {
@@ -41,7 +41,7 @@ class Organisations():
         return user.matched_count
 
     def exists(self,usid):
-        sts=self.db.organisations.find_one({'usid':usid})
+        sts=self.db.organisations.find_one({'usid':usid.lower()})
         if(sts): return 200
         else: return 404
 
@@ -49,11 +49,11 @@ class Organisations():
         orgsCursor=self.db.organisations.find({})
         orgs=[]
         for org in orgsCursor:
-            orgs.append({'usid':org['usid'],'name':org['name']})
+            orgs.append({'usid':org['usid'].lower(),'name':org['name']})
         return orgs
 
     def org(self, usid):
-        data=self.db.organisations.find_one({'usid':usid})
+        data=self.db.organisations.find_one({'usid':usid.lower()})
         if('passwd' in data.keys()): del data['passwd']
         data['_id']=str(data['_id'])
         return data
