@@ -1,6 +1,7 @@
 from PIL import Image
 import json
 import numpy as np
+import io
 
 ###### PREPROC_BETA PROCESS
 def dist(f, t):
@@ -31,14 +32,14 @@ def updateNPCoord():
     else:
         cd = [cd[0]+1, 0]
 
-def slotBits(loc):
-	try:
+def slotBits(buf):
+	# try:
 		global cd
 		cd = [0,0]
 		slot_state = np.zeros((14,13))
 		hops = []
 		final_list = []
-		tt = Image.open(loc).rotate(180)
+		tt = Image.open(io.BytesIO(buf)).rotate(180)
 		dim = tt.size
 
 		'''
@@ -142,6 +143,6 @@ def slotBits(loc):
 			a = a + 2
 
 		return final_list
-	except:
-		print('unexpected err', cd)
-		return
+	# except:
+	# 	print('unexpected err', cd)
+	# 	return

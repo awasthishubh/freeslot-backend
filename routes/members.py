@@ -14,10 +14,11 @@ def routes(app):
         name=''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
         data=request.form
         f = request.files['timeTable']
-        f.save('./tmp/'+name+'.png')
-        # slots=findSlot('./tmp/'+name+'.png')
-        slots=slotBits('./tmp/'+name+'.png')
-        os.remove('./tmp/'+name+'.png')
+        # f.save('./tmp/'+name+'.png')
+        # # slots=findSlot('./tmp/'+name+'.png')
+        # slots=slotBits('./tmp/'+name+'.png')
+        # os.remove('./tmp/'+name+'.png')
+        slots=slotBits(f.read())
         if(slots):
             details={
                 'name':data['name'],
@@ -36,8 +37,8 @@ def routes(app):
 
     @app.route('/test',methods=['post'])
     def test():
-        request.files['file'].save('./tmp/test.png')
-        return jsonify(slotBits('./tmp/test.png'))
+        return jsonify(slotBits(request.files['file'].read()))
+        
     @app.route('/test',methods=['get'])
     def sd():
         return '<form action="/test" method="post" enctype="multipart/form-data"><input type="file" name="file" /><input type="submit"></form>'
