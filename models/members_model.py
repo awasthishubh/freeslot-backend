@@ -53,6 +53,16 @@ class Members():
             return 200
         return 500
 
+    def insert2(self,data):
+        data['reg']=data['reg'].upper()
+        data['org']=data['org'].lower()
+        data['verified']=False
+        ins=self.db.members.insert_one(data)
+        if(ins):
+            data['_id']=str(data['_id'])
+            return 200
+        return 500
+
     def getmem(self,usid):
         usid=usid.lower()
         data=self.db.members.find({'org':usid, 'verified': True}).sort([("reg", ASCENDING)])
