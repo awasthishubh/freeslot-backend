@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, Response, request
 import sys, string, random, os
 from TT_SLOT import slotBits
-# from preproc_beta import preproc
 import model
 import json
 
@@ -51,6 +50,29 @@ def routes(app):
         if stat==500:
             return(jsonify({'status':500, 'err':'Internal Server Error'}),500)
         return(jsonify({'status':200, 'data':details}),200)
+    
+    @app.route('/parseimg',methods=['post'])
+    def memnde():
+        f = request.files['timeTable']
+        slots=slotBits(f.read())
+        if(slots):
+            numberedSlots=[]
+            for i in range(7):
+                day=slots[i*13:(i+1)*13]
+                day[5]=0
+                del day[11]
+                slot=[]
+                for x in range(len(day)):
+                    if(day[x]):
+                        slot.append(x)
+                numberedSlots.append(slot)
+            return (jsonify({'slots':numberedSlots}),200)
+        return (jsonify({'err':'bad file'}),400)
+
+
+    @app.route('/currentsem',methods=['get'])
+    def currentsem():
+        return 'VL2018195'
 
     @app.route('/test',methods=['post'])
     def test():
