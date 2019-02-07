@@ -143,3 +143,23 @@ def routes(app):
                 
         return jsonify(slots)
 
+    @app.route('/auth/members/getplan',methods=['get'])
+    @jwt_required
+    def getplan(payload):
+        start=int(request.args['start'])-8
+        end=int(request.args['end'])-8
+        day=int(request.args['day'])
+        memType=int(request.args['mem'])
+
+        if(start>end or start>16 or end>16 or start==end): return (jsonify({'err':'Invalid start, end time', 'status':400}),400)
+        mems=[]
+        reg=[]
+        for i in range(start,end):
+            mem=model.Members.suitFreeMem(payload['usid'],day,i,memType,reg)
+            if(mem): reg.append(mem['reg'])
+            mems.append(mem)
+        return jsonify({"members":mems})
+
+
+    
+

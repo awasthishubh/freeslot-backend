@@ -1,9 +1,21 @@
 from bson.objectid import ObjectId
 from pymongo import ASCENDING
+import random
+import datetime
 
 def preturn(data):
     data['_id']=str(data['_id'])
     return data
+
+def getMemRe(mem):
+    print(mem)
+    if(mem==0): return '.*'
+    now=datetime.datetime.now()
+    year=int(str(now.year)[2:4])
+    month=now.month
+    print(year,mem)
+    if(month<7): '^'+str(year-1)
+    return '^'+str(year-mem+1)
 
 def tocsv(data):
     data2="SNo,Reg,Name,Email,Phno,RoomNo\n"
@@ -133,5 +145,34 @@ class Members():
         if(not data): return(None,404)
         else:
             return (preturn(data),200)
+
+    def suitFreeMem(self,usid,day,slot,memType,nin):
+        daySlot="slots."+str(day)
+        memType=getMemRe(memType)
+        print("^18")
+        data=None
+        data=self.db.members.find({
+            "org":usid, "verified":True,
+            daySlot:{"$not":{"$elemMatch":{"$eq":slot}}},
+            # "$and":[
+            #     # {"reg": {"$regex":memType}},
+            #     # {"reg": {"$nin":nin}}
+            # ],
+            "$or":[
+                {daySlot:{"$elemMatch":{"$eq":slot+1}}},
+                {daySlot:{"$elemMatch":{"$eq":slot-1}}}
+            ]
+        })
+        # if(not data):
+        #     data=self.db.members.find({
+        #         "org":"acm", "verified":True,
+        #         "slots.0":{"$not":{"$elemMatch":{"$eq":0}}},
+        #         "reg": {"$nin":nin}
+        #     })
+        data=list(data)
+        if (not data):
+            return None
+        print(1213)
+        return preturn(data[random.randint(0,len(data)-1)])
 
 
