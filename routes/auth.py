@@ -97,7 +97,6 @@ def routes(app):
         day=int(request.args['day'])
         if(start>end or start>16 or end>16 or start==end): return (jsonify({'err':'Invalid start, end time', 'status':400}),400)
         array=[i for i in range(start,end)]
-        print(array)
         data=model.Members.freeMem(payload['usid'],day,array)
         if(data): return jsonify({'members':data, 'status':200})
         else: return (jsonify({'err':'No member found', 'status':404}),404)
