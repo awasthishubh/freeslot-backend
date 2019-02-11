@@ -160,10 +160,11 @@ class Members():
                 {daySlot:{"$elemMatch":{"$eq":slot-1}}}
             ]
         })
+        data=list(data)
         if(not data):
             data=self.db.members.find({
-                "org":"acm", "verified":True,
-                "slots.0":{"$not":{"$elemMatch":{"$eq":0}}},
+                "org":usid, "verified":True,
+                daySlot:{"$not":{"$elemMatch":{"$eq":slot}}},
                 "$and":[
                     {"reg": {"$regex":memType}},
                     {"reg": {"$nin":nin}}
@@ -171,7 +172,9 @@ class Members():
             })
         data=list(data)
         if (not data):
-            return None
-        return preturn(data[random.randint(0,len(data)-1)])
+            return {'forSlot':slot+8,'reg':None}
+        memToreturn=data[random.randint(0,len(data)-1)]
+        memToreturn['forSlot']=slot+8
+        return preturn(memToreturn)
 
 
