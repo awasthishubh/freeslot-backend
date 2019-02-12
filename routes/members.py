@@ -33,19 +33,20 @@ def routes(app):
     @app.route('/member',methods=['post'])
     def meminde():
         data=request.json
-        if(model.Organisations.exists(data['org'])==404):
-            return(jsonify({'status':404, 'err':'Ogranisation not found'}),404)
-        if(model.Members.exists(data['reg'],data['org'])):
-            return(jsonify({'status':409, 'err':'User Already registered under the organisation'}),409)
         details={
-            'name':data['name'].title(),
-            'reg':data['reg'].upper(),
-            'org':data['org'].lower(),
-            'email':data['email'].lower(),
-            'phno':data['phno'],
-            'rmno':data['rmno'].title(),
+            'name':data['name'].strip().title(),
+            'reg':data['reg'].strip().upper(),
+            'org':data['org'].strip().lower(),
+            'email':data['email'].strip().lower(),
+            'phno':data['phno'].strip(),
+            'rmno':data['rmno'].strip().title(),
             'slots':data['slots']
         }
+        if(model.Organisations.exists(details['org'])==404):
+            return(jsonify({'status':404, 'err':'Ogranisation not found'}),404)
+        if(model.Members.exists(details['reg'],details['org'])):
+            return(jsonify({'status':409, 'err':'User Already registered under the organisation'}),409)
+        
         stat=model.Members.insert2(details)
         if stat==500:
             return(jsonify({'status':500, 'err':'Internal Server Error'}),500)
