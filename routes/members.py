@@ -16,10 +16,10 @@ def routes(app):
         slots=slotBits(f.read())
         if(slots):
             details={
-                'name':data['name'],
-                'reg':data['reg'],
-                'org':data['org'],
-                'email':data['email'],
+                'name':data['name'].title(),
+                'reg':data['reg'].upper(),
+                'org':data['org'].lower(),
+                'email':data['email'].lower(),
                 'phno':data['phno'],
                 'rmno':data['rmno'],
                 'slots':slots
@@ -38,12 +38,12 @@ def routes(app):
         if(model.Members.exists(data['reg'],data['org'])):
             return(jsonify({'status':409, 'err':'User Already registered under the organisation'}),409)
         details={
-            'name':data['name'],
-            'reg':data['reg'],
-            'org':data['org'],
-            'email':data['email'],
+            'name':data['name'].title(),
+            'reg':data['reg'].upper(),
+            'org':data['org'].lower(),
+            'email':data['email'].lower(),
             'phno':data['phno'],
-            'rmno':data['rmno'],
+            'rmno':data['rmno'].title(),
             'slots':data['slots']
         }
         stat=model.Members.insert2(details)

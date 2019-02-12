@@ -40,10 +40,7 @@ class Members():
 
 
     def insert(self,data):
-        data['reg']=data['reg'].upper()
-        data['org']=data['org'].lower()
         slots=[]
-
         for i in range(7):
             day=data['slots'][i*13:(i+1)*13]
             day[5]=0
@@ -64,8 +61,6 @@ class Members():
         return 500
 
     def insert2(self,data):
-        data['reg']=data['reg'].upper()
-        data['org']=data['org'].lower()
         data['verified']=False
         ins=self.db.members.insert_one(data)
         if(ins):
