@@ -13,15 +13,15 @@ def jwt_required(func):
                 try:
                     payload=jwt.decode(auth[1],keys.jwt_secret)
                     if(model.Organisations.exists(payload['usid'])==404):
-                        return (jsonify({'err':'organisation not found'}), 404)
+                        return (jsonify({'err':'organisation not found'}), 401)
                     else:
                         return func(payload)
-                except jwt.exceptions.DecodeError:
-                    return (jsonify({'err':'invalid tokken'}), 400)
+                except:
+                    return (jsonify({'err':'invalid tokken'}), 401)
             else:
-                return (jsonify({'err':'Bearer tokken missing'}), 400)
+                return (jsonify({'err':'Bearer tokken missing'}), 401)
         else:
-            return (jsonify({'err':'Bearer tokken missing'}), 400)
+            return (jsonify({'err':'Bearer tokken missing'}), 401)
     return jwt_func
 ################################################
 
