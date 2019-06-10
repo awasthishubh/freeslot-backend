@@ -39,8 +39,8 @@ def setcores(response):
     return response
 
 debug=False
-if('HEROKU' not in os.environ):
-    debug=True
+# if('HEROKU' not in os.environ):
+#     debug=True
 
 if __name__ == '__main__':
     app.run(debug=debug)

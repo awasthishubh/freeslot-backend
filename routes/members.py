@@ -29,7 +29,7 @@ def routes(app):
                 return(jsonify({'status':500, 'err':'Internal Server Error'}),500)
             return(jsonify({'status':200, 'data':details}),200)
         return (jsonify({'err':'bad file'}),400)
-
+#--------------
     @app.route('/member',methods=['post'])
     def meminde():
         data=request.json
@@ -47,7 +47,7 @@ def routes(app):
         if(model.Members.exists(details['reg'],details['org'])):
             return(jsonify({'status':409, 'err':'User Already registered under the organisation'}),409)
         
-        stat=model.Members.insert2(details)
+        stat=model.Requests.new(details)
         if stat==500:
             return(jsonify({'status':500, 'err':'Internal Server Error'}),500)
         return(jsonify({'status':200, 'data':details}),200)
@@ -82,3 +82,8 @@ def routes(app):
     @app.route('/test',methods=['get'])
     def sd():
         return '<form action="/test" method="post" enctype="multipart/form-data"><input type="file" name="file" /><input type="submit"></form>'
+
+    @app.route('/testDB',methods=['get'])
+    def testdb():
+        print((model.db.members.find({'org':'acsm'}).count())+1)
+        return ''

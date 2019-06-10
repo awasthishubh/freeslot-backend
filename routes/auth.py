@@ -10,14 +10,14 @@ def jwt_required(func):
         if('Authorization' in request.headers.keys()):
             auth=(request.headers['Authorization']).split(' ')
             if(auth[0]=='Bearer'):
-                try:
+                # try:
                     payload=jwt.decode(auth[1],keys.jwt_secret)
                     if(model.Organisations.exists(payload['usid'])==404):
                         return (jsonify({'err':'organisation not found'}), 401)
                     else:
                         return func(payload)
-                except:
-                    return (jsonify({'err':'invalid tokken'}), 401)
+                # except:
+                #     return (jsonify({'err':'invalid tokken'}), 401)
             else:
                 return (jsonify({'err':'Bearer tokken missing'}), 401)
         else:
@@ -37,15 +37,18 @@ def routes(app):
         if(data):
             return jsonify({'details':data, 'status':200})
         return jsonify({'err':'Organisation not found', 'status':404})
-
+#-----------
     @app.route('/auth/requests',methods=['get'])
     @jwt_required
     def reqget(payload):
-        data=model.Members.getreq(payload['usid'])
-        if(data[1]==404):
-            return(jsonify({'err':'No request found under your organisation', 'status':404}), 404)
-        return (jsonify({'data':data[0], 'status':200}), 200)
-
+        # try:
+            data=model.Requests.get(payload['usid'])
+            if(data[1]==404):
+                return(jsonify({'err':'No request found under your organisation', 'status':404}), 404)
+            return (jsonify({'data':data[0], 'status':200}), 200)
+        # except:
+        #     print('err')
+        #     return ''
     @app.route('/auth/members',methods=['get'])
     @jwt_required
     def memget(payload):
@@ -69,7 +72,7 @@ def routes(app):
         if(stat==404):
             return(jsonify({'err':'No match found for usid', 'status':404}), 404)
         return (jsonify({'result':'deleted', 'status':200}), 200)
-
+#----------
     @app.route('/auth/requests',methods=['put'])
     @jwt_required
     def verify(payload):
