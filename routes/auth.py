@@ -41,14 +41,11 @@ def routes(app):
     @app.route('/auth/requests',methods=['get'])
     @jwt_required
     def reqget(payload):
-        # try:
-            data=model.Requests.get(payload['usid'])
-            if(data[1]==404):
-                return(jsonify({'err':'No request found under your organisation', 'status':404}), 404)
-            return (jsonify({'data':data[0], 'status':200}), 200)
-        # except:
-        #     print('err')
-        #     return ''
+        data=model.Requests.get(payload['usid'])
+        if(data[1]==404):
+            return(jsonify({'err':'No request found under your organisation', 'status':404}), 404)
+        return (jsonify({'data':data[0], 'status':200}), 200)
+
     @app.route('/auth/members',methods=['get'])
     @jwt_required
     def memget(payload):
@@ -73,11 +70,22 @@ def routes(app):
             return(jsonify({'err':'No match found for usid', 'status':404}), 404)
         return (jsonify({'result':'deleted', 'status':200}), 200)
 #----------
+    @app.route('/auth/requests',methods=['delete'])
+    @jwt_required
+    def reqdel(payload):
+        reg=request.args['reg']
+        count=request.args['count']
+        stat=model.Requests.delete(payload['usid'], reg, count)
+        if(stat==404):
+            return(jsonify({'err':'No match found for usid', 'status':404}), 404)
+        return (jsonify({'result':'deleted', 'status':200}), 200)
+
     @app.route('/auth/requests',methods=['put'])
     @jwt_required
     def verify(payload):
         reg=request.args['reg']
-        stat=model.Members.verify(payload['usid'], reg)
+        count=request.args['count']
+        stat=model.Requests.verify(payload['usid'], reg, count)
         if(stat==404):
             return(jsonify({'err':'No match found for org and reg', 'status':404}), 404)
         else:
@@ -113,7 +121,7 @@ def routes(app):
     @jwt_required
     def memstat(payload):
         members=model.Members.getmem(payload['usid'])
-        requests=model.Members.getreq(payload['usid'])
+        requests=model.Requests.get(payload['usid'])
         # return jsonify(members[0])
         stats={
             'requests':len(requests[0]),

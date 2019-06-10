@@ -18,17 +18,18 @@ class Requests():
     def verify(self, usid, reg, count):
         usid=usid.lower()
         reg=reg.upper()
-        data=self.db.requests.find_one({'org':usid, 'reg':reg, 'count':count})
+        print(reg,count)
+        data=self.db.requests.find_one({'org':usid, 'reg':reg, 'count':int(count)})
         if(not data): return 404
         del data['count']
         self.db.members.insert_one(data)
-        self.db.requests.deleteMany({'org':usid, 'reg':reg})
+        self.db.requests.delete_many({'org':usid, 'reg':reg})
         return 200
 
-    def delete(self,usid, reg):
+    def delete(self,usid, reg, count):
         usid=usid.lower()
         reg=reg.upper()
-        data=self.db.requests.delete_one({'org':usid, 'reg':reg})
+        data=self.db.requests.delete_one({'org':usid, 'reg':reg, 'count':int(count)})
         if(data.deleted_count):
             return 200
         else:

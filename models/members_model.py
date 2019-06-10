@@ -53,16 +53,7 @@ class Members():
 
         del data['slots']
         data['slots']=slots
-        data['verified']=False
-        ins=self.db.members.insert_one(data)
-        if(ins):
-            data['_id']=str(data['_id'])
-            return 200
-        return 500
-
-    def insert2(self,data):
-        data['verified']=False
-        ins=self.db.members.insert_one(data)
+        ins=self.db.requests.insert_one(data)
         if(ins):
             data['_id']=str(data['_id'])
             return 200
@@ -70,7 +61,7 @@ class Members():
 
     def getmem(self,usid):
         usid=usid.lower()
-        data=self.db.members.find({'org':usid, 'verified': True}).sort([("reg", ASCENDING)])
+        data=self.db.members.find({'org':usid}).sort([("reg", ASCENDING)])
         if(data):
             verified=[]
             for i in data:
@@ -81,19 +72,6 @@ class Members():
         else:
             return (None, 404)
     
-    def getreq(self,usid):
-        usid=usid.lower()
-        data=self.db.members.find({'org':usid, 'verified': False}).sort([("reg", ASCENDING)])
-        if(data):
-            unverified=[]
-            for i in data:
-                i=preturn(i)
-                i['visible']=True
-                unverified.append(i)
-            return (unverified, 200)
-        else:
-            return (None, 404)
-
     def delete(self,usid, reg):
         usid=usid.lower()
         reg=reg.upper()
@@ -103,18 +81,9 @@ class Members():
         else:
             return 404
 
-    def verify(self, usid, reg):
-        usid=usid.lower()
-        reg=reg.upper()
-        data=self.db.members.find_one({'org':usid, 'reg':reg})
-        if(not data): return 404
-        data=self.db.members.update({'org':usid, 'reg':reg},{'$set':{'verified':True}}, upsert=False)
-        return 200
-
-    
     def csv(self, usid):
         usid=usid.lower()
-        dataC=self.db.members.find({'org':usid, 'verified': True}).sort([("reg", ASCENDING)])
+        dataC=self.db.members.find({'org':usid}).sort([("reg", ASCENDING)])
         if(dataC):
             verified=[]
             for i in dataC:
@@ -144,7 +113,7 @@ class Members():
         memType=getMemRe(memType)
         data=None
         data=self.db.members.find({
-            "org":usid, "verified":True,
+            "org":usid,
             daySlot:{"$not":{"$elemMatch":{"$eq":slot}}},
             "$and":[
                 {"reg": {"$regex":memType}},
@@ -158,7 +127,7 @@ class Members():
         data=list(data)
         if(not data):
             data=self.db.members.find({
-                "org":usid, "verified":True,
+                "org":usid,
                 daySlot:{"$not":{"$elemMatch":{"$eq":slot}}},
                 "$and":[
                     {"reg": {"$regex":memType}},
