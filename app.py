@@ -43,4 +43,4 @@ debug=False
 #     debug=True
 
 if __name__ == '__main__':
-    app.run(debug=debug, port=2000)
+    app.run(debug=debug)
