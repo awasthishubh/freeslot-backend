@@ -6,3 +6,4 @@ pillow
 pymongo
 requests
 firebase-admin
+environs
