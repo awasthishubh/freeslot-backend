@@ -2,6 +2,7 @@ from bson.objectid import ObjectId
 from pymongo import ASCENDING
 import random
 import datetime
+import firebase
 
 def preturn(data):
     data['_id']=str(data['_id'])
@@ -29,6 +30,7 @@ def tocsv(data):
 class Members():
     def __init__(self, _db):
         self.db=_db
+        self.fb=firebase.Members()
     def exists(self,reg,org):
         reg=reg.upper()
         org=org.lower()
@@ -54,6 +56,7 @@ class Members():
         del data['slots']
         data['slots']=slots
         ins=self.db.requests.insert_one(data)
+        self.fb_mem.insert(str(data['_id']),data)
         if(ins):
             data['_id']=str(data['_id'])
             return 200
@@ -75,6 +78,9 @@ class Members():
     def delete(self,usid, reg):
         usid=usid.lower()
         reg=reg.upper()
+        id=self.db.members.find_one({'org':usid, 'reg':reg})['_id']
+        print(str(id))
+        self.fb.delete(str(id))
         data=self.db.members.delete_one({'org':usid, 'reg':reg})
         if(data.deleted_count):
             return 200
