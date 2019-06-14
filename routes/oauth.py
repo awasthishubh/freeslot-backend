@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, Response, request, redirect
 import jwt,requests
-from keys import keys
 import model
 import hashlib
+import os
 
 def routes(app):
     @app.route('/oauth/')
@@ -18,7 +18,7 @@ def routes(app):
 
         if stat[1]==409:
             return(jsonify({'status':409, 'err':'User Already Exists'}),409)
-        token=jwt.encode({'usid':stat[0]['usid']},keys.jwt_secret).decode("utf-8")
+        token=jwt.encode({'usid':stat[0]['usid']},os.environ['jwt_secret']).decode("utf-8")
 
         return ("""
         <script>

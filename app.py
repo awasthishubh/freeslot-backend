@@ -1,14 +1,16 @@
+#!/usr/bin/env python3
+
 import sys
 import os
+from environs import Env
+env = Env()
+env.read_env()
 sys.path.insert(0, './routes/addons')
 sys.path.insert(0, './routes')
-sys.path.insert(0, './config')
 sys.path.insert(0, './models')
 from flask import Flask, jsonify, Response, request, send_from_directory
 import members, auth, oauth, org
 app = Flask(__name__)
-from keys import keys
-
 app.config['UPLOAD_FOLDER'] = './tmp/'
 
 
@@ -38,9 +40,5 @@ def setcores(response):
     response.headers["Access-Control-Allow-Credentials"]= "true"
     return response
 
-debug=False
-# if('HEROKU' not in os.environ):
-#     debug=True
-
 if __name__ == '__main__':
-    app.run(debug=debug)
+    app.run(port=os.environ['PORT'], debug='debug' in os.environ)

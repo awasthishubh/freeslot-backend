@@ -1,6 +1,6 @@
 from flask import jsonify, Response, request
 import jwt, functools, sys, hashlib
-from keys import keys
+import os
 import model
 
 #########Decorator for decoding jwt#############
@@ -11,7 +11,7 @@ def jwt_required(func):
             auth=(request.headers['Authorization']).split(' ')
             if(auth[0]=='Bearer'):
                 # try:
-                    payload=jwt.decode(auth[1],keys.jwt_secret)
+                    payload=jwt.decode(auth[1],os.environ['jwt_secret'])
                     if(model.Organisations.exists(payload['usid'])==404):
                         return (jsonify({'err':'organisation not found'}), 401)
                     else:
