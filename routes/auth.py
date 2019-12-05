@@ -2,7 +2,15 @@ from flask import jsonify, Response, request
 import jwt, functools, sys, hashlib
 import os
 import model
+import datetime
 
+def getYearReg(i):
+    now=datetime.datetime.now()
+    m=now.month
+    t=int(str(now.year)[-2:])
+    # if(m>=7):
+    #     return str(t-i+1)
+    return str(t-i)
 #########Decorator for decoding jwt#############
 def jwt_required(func):
     @functools.wraps(func)
@@ -133,10 +141,10 @@ def routes(app):
         }
         for i in members[0]:
             stats['members']+=1
-            if(i['reg'][0:2]=='18'): stats['firstYr']+=1
-            if(i['reg'][0:2]=='17'): stats['secondYr']+=1
-            if(i['reg'][0:2]=='16'): stats['thirdYr']+=1
-            if(i['reg'][0:2]=='15'): stats['fourthYr']+=1
+            if(i['reg'][0:2]==getYearReg(1)): stats['firstYr']+=1
+            if(i['reg'][0:2]==getYearReg(2)): stats['secondYr']+=1
+            if(i['reg'][0:2]==getYearReg(3)): stats['thirdYr']+=1
+            if(i['reg'][0:2]==getYearReg(4)): stats['fourthYr']+=1
         return jsonify(stats)
 
     @app.route('/auth/members/timestat',methods=['get'])
