@@ -1,5 +1,5 @@
 flask
-PyJWT
+PyJWT==2.0.0
 gunicorn
 numpy
 pillow
@@ -7,3 +7,5 @@ pymongo
 requests
 firebase-admin
 environs
+pymongo[srv]
+dnspython

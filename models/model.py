@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import os
 
-db = MongoClient(os.environ['db']).tarp
+db = MongoClient(os.environ['db'])[os.environ['dbname']]
 
 from members_model import Members
 from org_model import Organisations

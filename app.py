@@ -41,4 +41,4 @@ def setcores(response):
     return response
 
 if __name__ == '__main__':
-    app.run(port=os.environ['PORT'], debug='debug' in os.environ)
+    app.run(port=int(os.environ['PORT']), debug='debug' in os.environ)
