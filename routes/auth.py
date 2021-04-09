@@ -19,7 +19,7 @@ def jwt_required(func):
             auth=(request.headers['Authorization']).split(' ')
             if(auth[0]=='Bearer'):
                 # try:
-                    payload=jwt.decode(auth[1],os.environ['jwt_secret'])
+                    payload=jwt.decode(auth[1],os.environ['jwt_secret'], algorithms=['HS256'])
                     if(model.Organisations.exists(payload['usid'])==404):
                         return (jsonify({'err':'organisation not found'}), 401)
                     else:

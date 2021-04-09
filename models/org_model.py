@@ -1,4 +1,4 @@
-import firebase
+# import firebase
 
 def preturn(data):
     data['_id']=str(data['_id'])
@@ -8,14 +8,12 @@ def preturn(data):
 class Organisations():
     def __init__(self, _db):
         self.db=_db
-        self.fb=firebase.Organisations()
     def create(self, data):
         exists=self.db.organisations.find_one({'usid':data['usid'].lower()})
         if(exists):
             return(data, 409)
         else:
             self.db.organisations.insert_one(data)
-            self.fb.insert(str(data['_id']),data)
             data['_id']=str(data['_id'])
             if('passwd' in data.keys()): del data['passwd']
             return (data,200)
@@ -41,7 +39,6 @@ class Organisations():
             'name': data['name'],
             'passwd': data['newPasswd']
         }
-        self.fb.update(str(id),data)
         user=self.db.organisations.update_one({'_id':id},{'$set': data}, upsert=False)
         return user.matched_count
 
@@ -68,7 +65,6 @@ class Organisations():
             'usid':data['usid'].lower(),
         })['_id']
         if(not id): return 0
-        self.fb.update(str(id),data)
         print(111111111,id)
         user=self.db.organisations.update_one({'_id':id},{'$set': data}, upsert=False)
         return user.matched_count

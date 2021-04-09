@@ -5,7 +5,7 @@ import sys
 sys.path.insert(0, './models')
 sys.path.insert(0, './config')
 import model
-import firebase
+# import firebase
 
 def artoob(ar):
     ob={}
@@ -21,4 +21,4 @@ data={
     'requests': artoob(model.db.requests.find())
 }
 
-firebase.db.reference('/').set(data)
+# firebase.db.reference('/').set(data)

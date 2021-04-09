@@ -26,7 +26,7 @@ def routes(app):
         data['dp']='https://www.gravatar.com/avatar/'+hash+'?d=retro&s=500'
         if stat[1]==409:
             return(jsonify({'status':409, 'err':'User Already Exists'}),409)
-        token=jwt.encode({'usid':stat[0]['usid']},os.environ['jwt_secret']).decode("utf-8")
+        token=jwt.encode({'usid':stat[0]['usid']},os.environ['jwt_secret'])
         print(stat[0])
         return jsonify({'data':stat[0],'token':token, 'status':200})
 
@@ -38,7 +38,7 @@ def routes(app):
         stat=model.Organisations.auth({'usid':usid, 'passwd':passwd})
         if(stat[1]!=200):
             return (jsonify({'err':'Invalid usid/password', 'status':401}), 401)
-        token=jwt.encode({'usid':usid},os.environ['jwt_secret']).decode("utf-8")
+        token=jwt.encode({'usid':usid},os.environ['jwt_secret'])
         
         gravatar=stat[0]['gravatar'] if 'gravatar' in stat[0].keys() and stat[0]['gravatar'] else stat[0]['name'] #For random color
         hash=hashlib.md5(gravatar.encode()).hexdigest()
